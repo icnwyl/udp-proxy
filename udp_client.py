@@ -43,14 +43,14 @@ def encrypt(data):
 		padlength = 50
 	else:
 		padlength = 10
-	return (h + struct.pack('<H', padlength) + rand_bytes(padlength) + data).translate(encrypt_table)
+	return (h + struct.pack('>H', padlength) + rand_bytes(padlength) + data).translate(encrypt_table)
 
 # hash(16) + padlength(unsigned int, 2) + pad + data
 def decrypt(data):
 	if len(data) <= 150:
 		return (False, '')
 	de = data.translate(decrypt_table)
-	padlength, = struct.unpack('<H', de[16:18]);
+	padlength, = struct.unpack('>H', de[16:18]);
 	h = de[:16]
 	data = de[18 + padlength:]
 
