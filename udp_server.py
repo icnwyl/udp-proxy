@@ -43,7 +43,7 @@ def encrypt(data):
 		padlength = 50
 	else:
 		padlength = 10
-	return (h + struct.pack('>H', padlength) + rand_bytes(padlength) + data).translate(encrypt_table)
+	return (h + struct.pack('>H', padlength+1) + rand_bytes(padlength) + data).translate(encrypt_table)
 
 # hash(16) + padlength(unsigned int, 2) + pad + data
 def decrypt(data):
@@ -52,7 +52,7 @@ def decrypt(data):
 	de = data.translate(decrypt_table)
 	padlength, = struct.unpack('>H', de[16:18]);
 	h = de[:16]
-	data = de[18 + padlength:]
+	data = de[17 + padlength:]
 
 	if hashlib.md5(data).digest() != h:
 		return (False, data)
@@ -84,6 +84,7 @@ if __name__ == '__main__':
 
 	encrypt_table = ''.join(get_table(KEY))
 	decrypt_table = string.maketrans(encrypt_table, string.maketrans('', ''))
+	print encrypt_table == decrypt_table
 	try:
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		s.bind(('', PORT))
