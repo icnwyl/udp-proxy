@@ -84,7 +84,6 @@ if __name__ == '__main__':
 
 	encrypt_table = ''.join(get_table(KEY))
 	decrypt_table = string.maketrans(encrypt_table, string.maketrans('', ''))
-	print encrypt_table == decrypt_table
 	try:
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		s.bind(('', PORT))
