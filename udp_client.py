@@ -36,18 +36,18 @@ def get_table(key):
 def encrypt(data):
 	h = hashlib.md5(data).digest()
 	if len(data) <= 50:
-		padlength = 150
+		padlength = 250
 	elif len(data) <= 100:
-		padlength = 100
+		padlength = 200
 	elif len(data) <= 150:
-		padlength = 50
+		padlength = 150
 	else:
-		padlength = 10
+		padlength = 110
 	return (h + struct.pack('>H', padlength+1) + rand_bytes(padlength) + data).translate(encrypt_table)
 
 # hash(16) + padlength(unsigned int, 2) + pad + data
 def decrypt(data):
-	if len(data) <= 150:
+	if len(data) <= 250:
 		return (False, '')
 	de = data.translate(decrypt_table)
 	padlength, = struct.unpack('>H', de[16:18]);
